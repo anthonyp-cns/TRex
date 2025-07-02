@@ -6,8 +6,8 @@ class FullResidentialMix():
         pass
 
     def get_profile(self, **kwargs):
-        ip_gen_c = ASTFIPGenDist(ip_range=["10.0.0.1", "10.0.0.254"], distribution="seq")
-        ip_gen_s = ASTFIPGenDist(ip_range=["20.0.0.1", "20.0.0.254"], distribution="seq")
+        ip_gen_c = ASTFIPGenDist(ip_range=["198.18.102.1", "198.18.102.254"], distribution="seq")
+        ip_gen_s = ASTFIPGenDist(ip_range=["203.0.113.1", "203.0.113.254"], distribution="seq")
         ip_gen = ASTFIPGen(dist_client=ip_gen_c, dist_server=ip_gen_s)
 
         templates = []

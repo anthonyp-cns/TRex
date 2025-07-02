@@ -1,0 +1,10 @@
+- name: udp_64B
+  stream:
+    isg: 0
+    mode: continuous
+    packet:
+      binary: |-
+        41414141414141414141414141414141414141414141
+    flow_stats:
+      enabled: true
+      id: 1

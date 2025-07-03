@@ -23,7 +23,7 @@ class Prof1():
         temp_udp = ASTFTemplate(
             client_template=prog_c,
             server_template=prog_s,
-           _id=7  # Example Packet Group ID
+           # _id=7  # Example Packet Group ID
         )
 
         # Create a profile

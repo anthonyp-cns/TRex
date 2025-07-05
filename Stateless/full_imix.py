@@ -12,7 +12,7 @@ class ComboIMIX:
         return STLStream(
             packet=STLPktBuilder(pkt=pkt / ('x' * payload_len)),
             mode=STLTXCont(),
-            flow_stats=STLFlowStats(pg_id=pg_id)
+            flow_stats=STLFlowLatencyStats(pg_id=pg_id)
         )
 
     def build_tcp(self, pkt_size, pg_id):
@@ -22,7 +22,7 @@ class ComboIMIX:
         return STLStream(
             packet=STLPktBuilder(pkt=pkt / ('x' * payload_len)),
             mode=STLTXCont(),
-            flow_stats=STLFlowStats(pg_id=pg_id)
+            flow_stats=STLFlowLatencyStats(pg_id=pg_id)
         )
 
     def get_streams(self, direction=0, **kwargs):

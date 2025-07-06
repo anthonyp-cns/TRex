@@ -10,7 +10,7 @@ class STLS1:
         self.pg_id = 10
 
 
-    def create_stream(self, src_ip, dst_ip, pg_id):
+    def create_stream(self, src_ip, dst_ip):
         # Ethernet/IP/UDP base
         base_pkt = Ether() / IP(src=src_ip, dst=dst_ip) / UDP(sport=1025, dport=8080)
 
@@ -23,8 +23,7 @@ class STLS1:
 
         return STLStream(
             packet=pkt_builder,
-            mode=STLTXCont(),
-            flow_stats=STLFlowStats(pg_id=pg_id)
+            mode=STLTXCont()
         )
 
 
@@ -51,8 +50,8 @@ class STLS1:
         for i in range(1, self.num_flows + 1):
             src = f"{source_range}{i}"
             dst = f"{dst_range}{i}"
-            pg_id = self.pg_id
-            streams.append(self.create_stream(src, dst, pg_id))
+
+            streams.append(self.create_stream(src, dst))
 
             # Create a separate Latency Stream
             src = f"{source_range}2"

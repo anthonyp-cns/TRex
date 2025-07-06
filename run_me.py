@@ -12,7 +12,7 @@ from trex.stl.api import STLClient, STLProfile
 
 
 #### SETUP ####
-test_folder = 'test_profiles' # folder containing all Trex Test profiles
+test_folder = 'Stateless' # folder containing all Trex Test profiles
 devices = [
     ['Netelastic01.boca.acore.network', '192.168.1.58', 'root', '12345678'],
     ['Netelastic02.boca.acore.network', '192.168.1.61', 'root', '12345678']

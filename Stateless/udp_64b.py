@@ -1,6 +1,8 @@
 from trex_stl_lib.api import *
-source_range = "198.18.104."
-dst_range = ""
+
+dst_range = "198.18.104."
+source_range = "203.0.113."
+
 class STLS1:
     def __init__(self):
         self.pkt_size = 64  # Change to 512 or 1500 as needed

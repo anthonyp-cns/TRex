@@ -1,5 +1,8 @@
 from trex_stl_lib.api import *
 
+dst_range = "198.18.104."
+source_range = "203.0.113."
+
 class STLS1:
     def __init__(self):
         self.pkt_size = 512  # Change to 512 or 1500 as needed
@@ -46,8 +49,8 @@ class STLS1:
     def get_streams(self, direction=0, **kwargs):
         streams = []
         for i in range(1, self.num_flows + 1):
-            src = f"198.18.104.{i}"
-            dst = f"203.0.113.{i}"
+            src = f"{source_range}{i}"
+            dst = f"{dst_range}{i}"
             pg_id = self.pg_id
             streams.append(self.create_stream(src, dst, pg_id))
 

@@ -18,8 +18,8 @@ devices = [
     ['Netelastic02.boca.acore.network', '192.168.1.61', 'root', '12345678']
 ]
 
-test_duration = 120 # Test duration in seconds
-stats_start_delay = 60
+test_duration = 30 # Test duration in seconds
+stats_start_delay = 0
 
 
 # Function to collect system stats from a remote machine
@@ -52,14 +52,20 @@ def collect_remote_stats(device, duration, interval, output_file):
 # Function to collect TRex stats
 def collect_trex_stats(client, duration, interval, output_file):
     with open(output_file, 'w', newline='') as csvfile:
-        fieldnames = ['timestamp', 'tx_pps', 'rx_pps', 'tx_bps', 'rx_bps', 'latency_avg', 'latency_max', 'out_of_order', 'packet_drops']
+        fieldnames = ['timestamp', 'tx_pps', 'rx_pps', 'tx_bps', 'rx_bps', 'latency_min', 'latency_avg', 'latency_max', 'out_of_order', 'packet_drop_rate']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
         for _ in range(duration):
             stats = client.get_stats()
-            latency = stats.get('latency', {})
+            latency = stats.get("latency").get(10).get("latency")
+            # Should return
+            # {'jitter': 191, 'average': 370.0, 'total_max': 567, 'total_min': 47, 'last_max': 493, 'histogram': {100: 21, 200: 15, 300: 15, 40: 2, 400: 47, 500: 11, 80: 1, 90: 2}}
+
             global_stats = stats.get('global', {})
+            # Should Return
+            # {'active_flows': 0.0, 'active_sockets': 0, 'bw_per_core': 0.1750040501356125, 'cpu_util': 0.009603138081729412, 'cpu_util_raw': 0.0, 'open_flows': 0.0, 'platform_factor': 1.0, 'rx_bps': 133784.34375, 'rx_core_pps': 0.9797892570495605, 'rx_cpu_util': 1.508487734724895e-08, 'rx_drop_bps': 0.0, 'rx_pps': 245.92710876464844, 'socket_util': 0.0, 'tx_expected_bps': 0.0, 'tx_expected_cps': 0.0, 'tx_expected_pps': 0.0, 'tx_pps': 245.92710876464844, 'tx_bps': 134447.046875, 'tx_cps': 0.0, 'total_servers': 0, 'total_clients': 0, 'total_alloc_error': 0, 'queue_full': 0}
+
             writer.writerow({
                 'timestamp': datetime.now().isoformat(),
                 'tx_pps': global_stats.get('tx_pps', 0),
@@ -67,19 +73,25 @@ def collect_trex_stats(client, duration, interval, output_file):
                 'tx_bps': global_stats.get('tx_bps', 0),
                 'rx_bps': global_stats.get('rx_bps', 0),
                 'latency_avg': latency.get('average', 0),
-                'latency_max': latency.get('max', 0),
-                'out_of_order': global_stats.get('oo_packets', 0),
-                'packet_drops': global_stats.get('tx_drop', 0)
+                'latency_min': latency.get('total_min', 0),
+                'latency_max': latency.get('total_max', 0),
+                'out_of_order': latency.get('out_of_order', 0),
+                'packet_drop_rate': global_stats.get('rx_drop_bps', 0)
             })
             time.sleep(interval)
 
 # Function to summarize stats from CSV files
+import os
+import csv
+
 def summarize_stats(stats_dir, summary_file):
     summary_data = []
+    all_keys = set()
 
+    # First pass: parse all files and build a full key set
     for root, _, files in os.walk(stats_dir):
         for file in files:
-            if file.endswith('.csv') and file != 'summary.csv':
+            if file.endswith('.csv') and file != os.path.basename(summary_file):
                 path = os.path.join(root, file)
                 with open(path, 'r') as f:
                     reader = csv.DictReader(f)
@@ -87,7 +99,12 @@ def summarize_stats(stats_dir, summary_file):
                     for row in reader:
                         for key in row:
                             if key != 'timestamp':
-                                metrics.setdefault(key, []).append(float(row[key]))
+                                try:
+                                    metrics.setdefault(key, []).append(float(row[key]))
+                                    all_keys.add(key)
+                                except ValueError:
+                                    continue  # skip non-numeric fields
+
                     if metrics:
                         summary = {'file': file}
                         for key, values in metrics.items():
@@ -95,13 +112,20 @@ def summarize_stats(stats_dir, summary_file):
                             summary[f'max_{key}'] = max(values)
                         summary_data.append(summary)
 
+    # Build the full list of columns to write
+    all_fieldnames = ['file']
+    for key in sorted(all_keys):
+        all_fieldnames.extend([f'min_{key}', f'max_{key}'])
+
+    # Second pass: write the output CSV
     with open(summary_file, 'w', newline='') as f:
-        if summary_data:
-            fieldnames = summary_data[0].keys()
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in summary_data:
-                writer.writerow(row)
+        writer = csv.DictWriter(f, fieldnames=all_fieldnames)
+        writer.writeheader()
+        for row in summary_data:
+            # Fill missing keys with empty string or None
+            complete_row = {field: row.get(field, '') for field in all_fieldnames}
+            writer.writerow(complete_row)
+
 
 # Main script
 def main():
@@ -131,8 +155,8 @@ def main():
             client.connect()
             client.reset()
             profile = STLProfile.load(test_path)
-            client.add_streams(profile.get_streams())
-            client.start(ports=[0], duration=test_duration, force=True)
+            client.add_streams(profile.get_streams(), ports=[0])
+            client.start(ports=[0], duration=test_duration, force=True, mult="98%")
 
             print(f"Running test {test_name} for {test_duration} seconds...")
             time.sleep(stats_start_delay)

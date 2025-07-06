@@ -84,15 +84,20 @@ def collect_trex_stats(client, duration, interval, output_file):
 import os
 import csv
 
-def summarize_stats(stats_dir, summary_file):
-    summary_data = []
-    all_keys = set()
+import os
+import csv
 
-    # First pass: parse all files and build a full key set
-    for root, _, files in os.walk(stats_dir):
-        for file in files:
-            if file.endswith('.csv') and file != os.path.basename(summary_file):
-                path = os.path.join(root, file)
+def summarize_stats_by_subfolder(stats_dir):
+    # Go through each subfolder
+    for subfolder in next(os.walk(stats_dir))[1]:  # immediate subdirectories only
+        subfolder_path = os.path.join(stats_dir, subfolder)
+        summary_data = []
+        all_keys = set()
+
+        # Iterate over all CSV files in this subfolder
+        for file in os.listdir(subfolder_path):
+            if file.endswith('.csv') and not file.endswith('_summary.csv'):
+                path = os.path.join(subfolder_path, file)
                 with open(path, 'r') as f:
                     reader = csv.DictReader(f)
                     metrics = {}
@@ -103,7 +108,7 @@ def summarize_stats(stats_dir, summary_file):
                                     metrics.setdefault(key, []).append(float(row[key]))
                                     all_keys.add(key)
                                 except ValueError:
-                                    continue  # skip non-numeric fields
+                                    continue  # Skip non-numeric values
 
                     if metrics:
                         summary = {'file': file}
@@ -112,19 +117,19 @@ def summarize_stats(stats_dir, summary_file):
                             summary[f'max_{key}'] = max(values)
                         summary_data.append(summary)
 
-    # Build the full list of columns to write
-    all_fieldnames = ['file']
-    for key in sorted(all_keys):
-        all_fieldnames.extend([f'min_{key}', f'max_{key}'])
+        # If we collected data, write a summary file in the same subfolder
+        if summary_data:
+            summary_file_path = os.path.join(subfolder_path, f"{subfolder}_summary.csv")
+            all_fieldnames = ['file']
+            for key in sorted(all_keys):
+                all_fieldnames.extend([f'min_{key}', f'max_{key}'])
 
-    # Second pass: write the output CSV
-    with open(summary_file, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=all_fieldnames)
-        writer.writeheader()
-        for row in summary_data:
-            # Fill missing keys with empty string or None
-            complete_row = {field: row.get(field, '') for field in all_fieldnames}
-            writer.writerow(complete_row)
+            with open(summary_file_path, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=all_fieldnames)
+                writer.writeheader()
+                for row in summary_data:
+                    complete_row = {field: row.get(field, '') for field in all_fieldnames}
+                    writer.writerow(complete_row)
 
 
 # Main script
@@ -179,9 +184,8 @@ def main():
             client.stop()
             client.disconnect()
 
-    summary_file = os.path.join(stats_base_dir, 'summary.csv')
-    summarize_stats(stats_base_dir, summary_file)
-    print(f"Summary written to {summary_file}")
+    summarize_stats_by_subfolder(stats_base_dir)
+    print(f"Summary written to each test folder")
 
 if __name__ == "__main__":
     main()

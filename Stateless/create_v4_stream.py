@@ -1,13 +1,11 @@
 from trex_stl_lib.api import *
-
-dst_range = "198.18.104."
-source_range = "203.0.113."
-
 class STLS1:
-    def __init__(self):
-        self.pkt_size = 64  # Change to 512 or 1500 as needed
-        self.num_flows = 250
-        self.pg_id = 10
+    def __init__(self, src_range, dst_range,pkt_size, num_flows,pg_id):
+        self.pkt_size = pkt_size  # Change to 512 or 1500 as needed
+        self.num_flows = num_flows
+        self.pg_id = pg_id
+        self.src_range = src_range
+        self.dst_range = dst_range
 
 
     def create_stream(self, src_ip, dst_ip):
@@ -48,15 +46,15 @@ class STLS1:
     def get_streams(self, direction=0, **kwargs):
         streams = []
         for i in range(1, self.num_flows + 1):
-            src = f"{source_range}{i}"
-            dst = f"{dst_range}{i}"tcp_64b.py
+            src = f"{self.src_range}{i}"
+            dst = f"{self.dst_range}{i}"
             streams.append(self.create_stream(src, dst))
 
-            # Create a separate Latency Stream
-            src = f"{source_range}2"
-            dst = f"{dst_range}2"
-            pg_id = self.pg_id
-            streams.append(self.create_latency_stream(src, dst, pg_id))
+        # Create a separate Latency Stream
+        src = f"{self.src_range}2"
+        dst = f"{self.dst_range}2"
+        pg_id = self.pg_id
+        streams.append(self.create_latency_stream(src, dst, pg_id))
         return streams
 
 

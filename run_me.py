@@ -7,8 +7,12 @@ from datetime import datetime
 import paramiko
 import psutil
 import sys
+
+from Stateless.tcp_1500b import dst_range
+
 sys.path.append('/scratch/trex-core/scripts/automation/trex_control_plane/interactive')
 from trex.stl.api import STLClient, STLProfile
+from Stateless.create_v4_stream import STLSv4
 
 
 #### SETUP ####
@@ -18,6 +22,31 @@ devices = [
     ['Netelastic02.boca.acore.network', '192.168.1.61', 'root', '12345678']
 ]
 
+v4_tests =[
+    {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240, "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1201_tcp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    {"name": "1201_tcp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    {"name": "1201_udp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
+    {"name": "1201_udp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
+    {"name": "1201_udp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"}
+]
 test_duration = 30 # Test duration in seconds
 stats_start_delay = 0
 
@@ -80,13 +109,6 @@ def collect_trex_stats(client, duration, interval, output_file):
             })
             time.sleep(interval)
 
-# Function to summarize stats from CSV files
-import os
-import csv
-
-import os
-import csv
-
 def summarize_stats_by_subfolder(stats_dir):
     # Go through each subfolder
     for subfolder in next(os.walk(stats_dir))[1]:  # immediate subdirectories only
@@ -148,24 +170,20 @@ def main():
 
     stats_duration = test_duration - stats_start_delay
     interval = 1
-
-    for test_file in os.listdir(test_folder):
-        if test_file.endswith('.py'):
-            test_name = os.path.splitext(test_file)[0]
-            test_path = os.path.join(test_folder, test_file)
-            test_stats_dir = os.path.join(stats_base_dir, test_name)
-            os.makedirs(test_stats_dir, exist_ok=True)
-
+# {"name": "udp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240, "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"}
+    for test in v4_tests:
+            profile=STLSv4(src_range=test.get('src_range'), dst_range=test.get('dst_range'), pkt_size=test.get('packet_size'), num_flows=test.get("num_flows"),
+                          pg_id=test.get("pg_id"), vlan_id=test.get("vlan_id"), protocol=test.get("protocol"))
             client = STLClient()
             client.connect()
             client.reset()
-            profile = STLProfile.load(test_path)
             client.add_streams(profile.get_streams(), ports=[0])
             client.start(ports=[0], duration=test_duration, force=True, mult="98%")
 
-            print(f"Running test {test_name} for {test_duration} seconds...")
+            print(f"Running test {test.get("name")} for {test_duration} seconds...")
             time.sleep(stats_start_delay)
-
+            test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
+            os.makedirs(test_stats_dir, exist_ok=True)
             threads = []
             for device in devices:
                 output_file = os.path.join(test_stats_dir, f"{device[0]}.csv")

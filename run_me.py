@@ -227,10 +227,10 @@ def main():
             client.reset()
             client.set_service_mode(ports=[0], enabled=True, filtered=False, mask=None)
             if test.get("vlan_id") == 1101:
-                client.set_l3_mode([0], "198.18.101.5","198.18.101.1", vlan=1101)
+                client.set_l3_mode(0, "198.18.101.5","198.18.101.1", vlan=1101)
                 client.arp(ports=[0], retries=3, verbose=True, vlan=1101)
             elif test.get("vlan_id") ==1201:
-                client.set_l3_mode([0], "100.66.0.5","100.66.0.1", vlan=1201)
+                client.set_l3_mode(0, "100.66.0.5","100.66.0.1", vlan=1201)
                 client.arp(ports=[0], retries=3, verbose=True, vlan=1201)
             client.set_service_mode(ports=[0], enabled=False, filtered=False, mask=None)
 

@@ -18,12 +18,7 @@ class IMIXStream:
         eth = Ether()
         if self.vlan_id is not None:
             eth /= Dot1Q(vlan=self.vlan_id)
-
-        if self.protocol == "udp":
-            l4 = UDP(sport=sport, dport=dport)
-        else:
             l4 = TCP(sport=sport, dport=dport)
-
         ip_pkt = IP(src=src_ip, dst=dst_ip) / l4
         return eth / ip_pkt
 

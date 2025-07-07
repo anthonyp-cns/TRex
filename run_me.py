@@ -3,7 +3,7 @@ import time
 import csv
 import getpass
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 import paramiko
 import psutil
 import sys
@@ -15,7 +15,7 @@ from Stateless.create_v6_stream import STLSv6
 from Stateless.create_imix import IMIXStream
 
 #### SETUP ####
-test_duration = 600 # Test duration in seconds
+test_duration = 5 * 60 + 30 # Test duration in seconds
 stats_start_delay = 30
 devices = [
     ['Netelastic01.boca.acore.network', '192.168.1.58', 'root', '12345678'],
@@ -168,8 +168,21 @@ def main():
     password = getpass.getpass("Enter password (DEFAULT: 12345678): ") or "12345678"
 
     devices.append([f'libreqos.{tower_name}.acore.network', ip, username, password])
+
+    total_test_duration = ((len(v4_tests) + len(v4_imix_tests)) * test_duration)
+    now = datetime.now()
+    future = now + timedelta(seconds=total_test_duration)
+    total_test_duration_units = "seconds"
+    if total_test_duration > 60:
+        total_test_duration = total_test_duration / 60
+        total_test_duration_units = "minutes"
+        if total_test_duration > 60:
+            total_test_duration = total_test_duration / 60
+            total_test_duration_units = "Hours"
+
+
     print(f"Running{len(v4_tests) + len(v4_imix_tests)} tests.\n Tests will take approximately "
-          f"{((len(v4_tests) + len(v4_imix_tests)) * test_duration + 60) / 60}.")
+          f"{total_test_duration} {total_test_duration_units}.  Expected completion: {future.strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]}")
     time.sleep(3)
 
     stats_base_dir = os.path.join('stats', tower_name)
@@ -185,7 +198,6 @@ def main():
             client = STLClient()
             client.connect()
             client.reset()
-            print("Setting Service Mode")
             client.set_service_mode(ports=[0], enabled=True, filtered=False, mask=None)
             if test.get("vlan_id") == 1101:
                 client.set_l3_mode(0, "198.18.101.5","198.18.101.1", vlan=1101)
@@ -198,7 +210,7 @@ def main():
             client.add_streams(profile.get_streams(), ports=[0])
             client.start(ports=[0], duration=test_duration, force=True, mult="98%")
 
-            print(f"Running test {test.get('name')} for {test_duration} seconds...")
+            print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
             time.sleep(stats_start_delay)
             test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
             os.makedirs(test_stats_dir, exist_ok=True)
@@ -247,7 +259,7 @@ def main():
 
         client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
 
-        print(f"Running test {test.get('name')} for {test_duration} seconds...")
+        print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
         time.sleep(stats_start_delay)
         test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
         os.makedirs(test_stats_dir, exist_ok=True)

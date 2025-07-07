@@ -14,6 +14,18 @@ class IMIXStream:
             (512, 30),
             (1500, 10)
         ]
+    def build_base_pkt(self, src_ip, dst_ip, sport, dport):
+        eth = Ether()
+        if self.vlan_id is not None:
+            eth /= Dot1Q(vlan=self.vlan_id)
+
+        if self.protocol == "udp":
+            l4 = UDP(sport=sport, dport=dport)
+        else:
+            l4 = TCP(sport=sport, dport=dport)
+
+        ip_pkt = IP(src=src_ip, dst=dst_ip) / l4
+        return eth / ip_pkt
 
     def _build_packet(self, src_ip, dst_ip, size):
         l3 = IP(src=str(src_ip), dst=str(dst_ip)) / UDP(sport=1234, dport=1234)

@@ -199,6 +199,7 @@ def main():
     total_test_duration = ((len(v4_tests) + len(v4_imix_tests)) * test_duration)
     now = datetime.now()
     future = now + timedelta(seconds=total_test_duration)
+
     total_test_duration_units = "seconds"
     if total_test_duration > 60:
         total_test_duration = total_test_duration / 60
@@ -208,9 +209,8 @@ def main():
             total_test_duration_units = "Hours"
 
 
-    print(f"Running{len(v4_tests) + len(v4_imix_tests)} tests.\n Tests will take approximately "
-          f"{total_test_duration} {total_test_duration_units}.  Expected completion: {future.strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]}")
-    time.sleep(3)
+    print(f"Running {len(v4_tests) + len(v4_imix_tests)} tests.\n Tests will take approximately "
+          f"{total_test_duration} {total_test_duration_units}.  Expected completion: {future.strftime('%Y-%m-%d %H:%M')}")
 
     stats_base_dir = os.path.join('stats', tower_name)
     os.makedirs(stats_base_dir, exist_ok=True)
@@ -286,7 +286,7 @@ def main():
 
         client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
 
-        print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
+        print(f"{datetime.now().strftime('%H:%M:%S') }  -  Running test {test.get('name')} for {test_duration} seconds...")
         time.sleep(stats_start_delay)
         test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
         os.makedirs(test_stats_dir, exist_ok=True)

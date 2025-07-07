@@ -48,9 +48,9 @@ v4_tests =[
     #  "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"}
 ]
 v4_imix_tests = [
-    {"name": "1101_v4_imix","src_range": "198.18.104.","dst_range": "203.0.113.", "num_flows":240,
+    {"name": "1101_v4_imix","src_range": ["198.18.104.1", "198.18.104.254" ],"dst_range": ["203.0.113.0","203.0.113.254"], "num_flows":240,
      "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
-    {"name": "1201_v4_imix", "src_range": "100.65.0.", "dst_range": "203.0.113.", "num_flows": 240,
+    {"name": "1201_v4_imix", "src_range": ["100.65.0.0", "100.65.0.254"], "dst_range": ["203.0.113.0", "203.0.113.254"], "num_flows": 240,
      "pg_id": 10, "vlan_id": 1301, 'protocol': "udp"}
 ]
 test_duration = 30 # Test duration in seconds

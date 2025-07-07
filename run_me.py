@@ -55,33 +55,7 @@ v4_imix_tests = [
      "pg_id": 10, "vlan_id": 1301, 'protocol': "udp"}
 ]
 
-v6_tests = [] #[
-#     {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
-#      "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
-#     {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-#     {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-#     {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-#     {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-#     {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-#     {"name": "1201_tcp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-#     {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-#     {"name": "1201_tcp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-#     {"name": "1201_udp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
-#     {"name": "1201_udp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
-#     {"name": "1201_udp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-#      "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"}
-# ]
-
+v6_tests = [] 
 
 # Function to collect system stats from a remote machine
 def collect_remote_stats(device, duration, interval, output_file):

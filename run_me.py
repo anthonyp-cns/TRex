@@ -23,30 +23,30 @@ devices = [
 ]
 
 v4_tests =[
-    # {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
-    #  "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
+     "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
     # {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
     #  "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
     # {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
     #  "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-    # {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
     # {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
     #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
     # {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
     #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
     {"name": "1201_tcp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
      "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-    {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-    {"name": "1201_tcp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    # {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    # {"name": "1201_tcp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
     {"name": "1201_udp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
      "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
-    {"name": "1201_udp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
-    {"name": "1201_udp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"}
+    # {"name": "1201_udp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
+    # {"name": "1201_udp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"}
 ]
 v4_imix_tests = [
     # {"name": "1101_v4_imix","src_range": "198.18.104.0/24","dst_range": "203.0.113.0/24", "num_flows":240,
@@ -55,7 +55,7 @@ v4_imix_tests = [
      "pg_id": 10, "vlan_id": 1301, 'protocol': "udp"}
 ]
 
-# v6_tests =[
+v6_tests = [] #[
 #     {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
 #      "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
 #     {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
@@ -276,16 +276,20 @@ def main():
         client = STLClient()
         client.connect()
         client.reset()
-        client.set_service_mode(ports=[0], enabled=True, filtered=False, mask=None)
-
+        client.set_service_mode(ports=[0, 1], enabled=True, filtered=False, mask=None)
         if test.get("vlan_id") == 1101:
-            client.set_l3_mode(0, "198.18.101.5","198.18.101.1", vlan=1101)
+            client.set_l3_mode(0, "198.18.101.5", "198.18.101.1", vlan=1101)
+            client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
             client.arp(ports=[0], retries=3, verbose=True, vlan=1101)
-        elif test.get("vlan_id") ==1201:
-            client.set_l3_mode(0, "100.66.0.5","100.66.0.1", vlan=1201)
-            client.arp(ports=[0], retries=3, verbose=True, vlan=1201)
+            client.arp(ports=[1], retries=3, verbose=True)
 
-        client.set_service_mode(ports=[0], enabled=False, filtered=False, mask=None)
+        elif test.get("vlan_id") == 1201:
+            client.set_l3_mode(0, "100.66.0.5", "100.66.0.1", vlan=1201)
+            client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+            client.arp(ports=[0], retries=3, verbose=True, vlan=1201)
+            client.arp(ports=[1], retries=3, verbose=True)
+
+        client.set_service_mode(ports=[0, 1], enabled=False, filtered=False, mask=None)
 
         client.add_streams(profile.get_streams(), ports=[0])
 
@@ -294,8 +298,8 @@ def main():
             multiplier = "50%"
 
         client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
-
-        print(f"{datetime.now().strftime('%H:%M:%S') }  -  Running test {test.get('name')} for {test_duration} seconds...")
+        now = datetime.now()
+        print(f"{ now.strftime('%H:%M:%S') }  -  Running test {test.get('name')} for {test_duration} seconds...")
         time.sleep(stats_start_delay)
         test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
         os.makedirs(test_stats_dir, exist_ok=True)
@@ -316,6 +320,68 @@ def main():
 
         client.stop()
         client.disconnect()
+
+
+
+
+
+    for test in v6_tests:
+            profile=STLSv6(src_range=test.get('src_range'), dst_range=test.get('dst_range'), pkt_size=test.get('packet_size'), num_flows=test.get("num_flows"),
+                          pg_id=test.get("pg_id"), vlan_id=test.get("vlan_id"), protocol=test.get("protocol"))
+            client = STLClient()
+            client.connect()
+            client.reset()
+            client.set_service_mode(ports=[0,1], enabled=True, filtered=False, mask=None)
+            # 1101 Int address ipv6 route vrf alliance-evpn-public 3fff:ba7a:1101::/64  3fff:da7a:1101::5
+            # 1201 Int address ipv6 route vrf alliance-evpn-cgnat 3fff:ba7a:1201::/64  3fff:da7a:1201::5
+            if test.get("vlan_id") == 1101:
+                client.set_l3_mode(0, "198.18.101.5","198.18.101.1", vlan=1101)
+                client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+                client.conf_ipv6(0, enabled, src_ipv6="3fff:da7a:1101::5")
+                client.conf_ipv6(1, enabled, src_ipv6="3fff:aa7a:1101::2")
+                client.arp(ports=[0], retries=3, verbose=True, vlan=1101)
+                client.arp(ports=[1], retries=3, verbose=True)
+
+            elif test.get("vlan_id") ==1201:
+                client.set_l3_mode(0, "100.66.0.5","100.66.0.1", vlan=1201)
+                client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+                client.conf_ipv6(0, enabled, src_ipv6="3fff:da7a:1201::5")
+                client.conf_ipv6(1, enabled, src_ipv6="3fff:aa7a:1101::2")
+                client.arp(ports=[0], retries=3, verbose=True, vlan=1201)
+                client.arp(ports=[1], retries=3, verbose=True)
+
+            client.set_service_mode(ports=[0,1], enabled=False, filtered=False, mask=None)
+
+            client.add_streams(profile.get_streams(), ports=[0])
+            multiplier = "98%"
+            if "64" in test.get("name"):
+                multiplier = "50%"
+            client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
+
+            print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
+            time.sleep(stats_start_delay)
+            test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
+            os.makedirs(test_stats_dir, exist_ok=True)
+            threads = []
+            for device in devices:
+                output_file = os.path.join(test_stats_dir, f"{device[0]}.csv")
+                t = threading.Thread(target=collect_remote_stats, args=(device, stats_duration, interval, output_file), name=f"collect_stats_{device[0]}")
+                t.start()
+                threads.append(t)
+
+            trex_stats_file = os.path.join(test_stats_dir, "trex_stats.csv")
+            t = threading.Thread(target=collect_trex_stats, args=(client, stats_duration, interval, trex_stats_file))
+            t.start()
+            threads.append(t)
+
+            for t in threads:
+                t.join()
+
+            client.stop()
+            client.disconnect()
+
+
+
 
     summarize_stats_by_subfolder(stats_base_dir)
     print(f"Summary written to each test folder")

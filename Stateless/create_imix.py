@@ -1,6 +1,6 @@
 from trex_stl_lib.api import *
 from scapy.all import Ether, IP, IPv6, UDP, Raw, Dot1Q
-from trex_stl_lib.trex_stl_vm import STLFlowVar, STLScVmRaw, STLScVmWrFlowVar, STLScVmFixHwCs
+from trex_stl_lib.trex_stl_streams import STLFlowVar, STLScVmRaw, STLScVmWrFlowVar, STLScVmFixHwCs
 
 
 class IMIXStream:

@@ -15,37 +15,38 @@ from Stateless.create_v6_stream import STLSv6
 from Stateless.create_imix import IMIXStream
 
 #### SETUP ####
-test_folder = 'Stateless' # folder containing all Trex Test profiles
+test_duration = 600 # Test duration in seconds
+stats_start_delay = 30
 devices = [
     ['Netelastic01.boca.acore.network', '192.168.1.58', 'root', '12345678'],
     ['Netelastic02.boca.acore.network', '192.168.1.61', 'root', '12345678']
 ]
 
 v4_tests =[
-    # {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
-    #  "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
-    # {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-    # {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-    # {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-    # {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-    # {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-    # {"name": "1201_tcp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-    # {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-    # {"name": "1201_tcp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
-    # {"name": "1201_udp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
-    # {"name": "1201_udp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
-    # {"name": "1201_udp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"}
+    {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
+     "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1201_tcp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    {"name": "1201_tcp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
+    {"name": "1201_udp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
+    {"name": "1201_udp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"},
+    {"name": "1201_udp_1500b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1201, 'protocol': "udp"}
 ]
 v4_imix_tests = [
     {"name": "1101_v4_imix","src_range": "198.18.104.0/24","dst_range": "203.0.113.0/24", "num_flows":240,
@@ -53,8 +54,6 @@ v4_imix_tests = [
     {"name": "1201_v4_imix", "src_range": "100.65.0.0/24", "dst_range": "203.0.113.0/24", "num_flows": 240,
      "pg_id": 10, "vlan_id": 1301, 'protocol': "udp"}
 ]
-test_duration = 30 # Test duration in seconds
-stats_start_delay = 0
 
 
 # Function to collect system stats from a remote machine
@@ -168,7 +167,9 @@ def main():
     password = getpass.getpass("Enter password (DEFAULT: 12345678): ") or "12345678"
 
     devices.append([f'libreqos.{tower_name}.acore.network', ip, username, password])
-
+    print(f"Running{len(v4_tests) + len(v4_imix_tests)} tests.\n Tests will take approximately "
+          f"{((len(v4_tests) + len(v4_imix_tests)) * test_duration + 60) / 60}.")
+    time.sleep(3)
 
     stats_base_dir = os.path.join('stats', tower_name)
     os.makedirs(stats_base_dir, exist_ok=True)

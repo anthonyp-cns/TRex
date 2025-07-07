@@ -8,8 +8,6 @@ import paramiko
 import psutil
 import sys
 
-from Stateless.tcp_1500b import dst_range
-
 sys.path.append('/scratch/trex-core/scripts/automation/trex_control_plane/interactive')
 from trex.stl.api import STLClient, STLProfile
 from Stateless.create_v4_stream import STLSv4

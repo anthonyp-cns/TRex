@@ -178,6 +178,7 @@ def main():
             client = STLClient()
             client.connect()
             client.reset()
+            client.set_service_mode_base(ports=[0], enabled=True, filtered=False, mask=None)
             if test.get("vlan_id") == 1101:
                 client.set_l3_mode(0, "198.18.101.5","198.18.101.1", vlan=1101)
                 client.arp(ports=[0], retries=3, verbose=True, vlan=1101)
@@ -188,7 +189,9 @@ def main():
             client.add_streams(profile.get_streams(), ports=[0])
             client.start(ports=[0], duration=test_duration, force=True, mult="98%")
 
-            print(f"Running test {test.get("name")} for {test_duration} seconds...")
+            client.set_service_mode_base(ports=[0], enabled=False, filtered=False, mask=None)
+
+            print(f"Running test {test.get('name')} for {test_duration} seconds...")
             time.sleep(stats_start_delay)
             test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
             os.makedirs(test_stats_dir, exist_ok=True)

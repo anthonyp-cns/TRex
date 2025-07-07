@@ -1,7 +1,7 @@
 from trex_stl_lib.api import *
 from scapy.all import Ether, IP, TCP, UDP, Dot1Q
 
-class STLS1v4:
+class STLSv4:
     def __init__(self, src_range, dst_range, pkt_size, num_flows, pg_id, vlan_id=None, protocol="tcp"):
         self.pkt_size = pkt_size
         self.num_flows = num_flows

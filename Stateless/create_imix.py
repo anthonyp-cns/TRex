@@ -4,11 +4,11 @@ import ipaddress
 
 
 class IMIXStream:
-    def __init__(self, src_range, dst_range, vlan_id=None):
+    def __init__(self, src_range, dst_range, vlan_id=None, pg_id=10):
         self.src_range = list(ipaddress.IPv4Network(src_range).hosts())
         self.dst_range = list(ipaddress.IPv4Network(dst_range).hosts())
         self.vlan_id = vlan_id
-
+        self.pg_id = pg_id
         self.imix = [
             (64, 60),
             (512, 30),
@@ -26,6 +26,20 @@ class IMIXStream:
 
         pkt = eth / l3 / Raw(b"A" * max(payload_len, 0))
         return STLPktBuilder(pkt=pkt)
+
+
+    def create_latency_stream(self, src_ip, dst_ip, pg_id=None):
+        base_pkt = self.build_base_pkt(src_ip, dst_ip, 1120, 8888)
+
+        payload = 'x' * 24
+        pkt_builder = STLPktBuilder(pkt=base_pkt / payload)
+
+        return STLStream(
+            packet=pkt_builder,
+            mode=STLTXCont(),
+            flow_stats=STLFlowLatencyStats(pg_id=pg_id)
+        )
+
 
     def get_streams(self):
         streams = []
@@ -45,5 +59,8 @@ class IMIXStream:
                 )
                 streams.append(stream)
                 stream_id += 1
+            src_ip = self.src_range[2]
+            dst_ip = self.dst_range[2]
+            streams.append(self.create_latency_stream(src_ip, dst_ip, self.pg_id))
 
         return streams

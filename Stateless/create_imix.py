@@ -10,9 +10,9 @@ class IMIXStream:
         self.vlan_id = vlan_id
         self.pg_id = pg_id
         self.imix = [
-            (64, 60),
-            (512, 30),
-            (1500, 10)
+            (64, 10),
+            (512, 60),
+            (1500, 30)
         ]
     def build_base_pkt(self, src_ip, dst_ip, sport, dport):
         eth = Ether()

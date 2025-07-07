@@ -65,12 +65,4 @@ class STLSv4:
         return streams
 
 def register():
-    return STLS1(
-        src_range="10.0.0.",
-        dst_range="20.0.0.",
-        pkt_size=128,
-        num_flows=10,
-        pg_id=7,
-        vlan_id=100,
-        protocol="udp"  # Change to "tcp" or "udp"
-    )
+    return STLSv4()

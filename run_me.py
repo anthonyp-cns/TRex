@@ -95,17 +95,18 @@ def collect_trex_stats(client, duration, interval, output_file):
             latency = stats.get("latency").get(10).get("latency")
             # Should return
             # {'jitter': 191, 'average': 370.0, 'total_max': 567, 'total_min': 47, 'last_max': 493, 'histogram': {100: 21, 200: 15, 300: 15, 40: 2, 400: 47, 500: 11, 80: 1, 90: 2}}
-
+            p0 = stats.get(0, {})
+            p1 = stats.get(1, {})
             global_stats = stats.get('global', {})
             # Should Return
             # {'active_flows': 0.0, 'active_sockets': 0, 'bw_per_core': 0.1750040501356125, 'cpu_util': 0.009603138081729412, 'cpu_util_raw': 0.0, 'open_flows': 0.0, 'platform_factor': 1.0, 'rx_bps': 133784.34375, 'rx_core_pps': 0.9797892570495605, 'rx_cpu_util': 1.508487734724895e-08, 'rx_drop_bps': 0.0, 'rx_pps': 245.92710876464844, 'socket_util': 0.0, 'tx_expected_bps': 0.0, 'tx_expected_cps': 0.0, 'tx_expected_pps': 0.0, 'tx_pps': 245.92710876464844, 'tx_bps': 134447.046875, 'tx_cps': 0.0, 'total_servers': 0, 'total_clients': 0, 'total_alloc_error': 0, 'queue_full': 0}
 
             writer.writerow({
                 'timestamp': datetime.now().isoformat(),
-                'tx_pps': global_stats.get('tx_pps', 0),
-                'rx_pps': global_stats.get('rx_pps', 0),
-                'tx_bps': global_stats.get('tx_bps', 0),
-                'rx_bps': global_stats.get('rx_bps', 0),
+                'tx_pps': p0.get('tx_pps', 0),
+                'rx_pps': p1.get('rx_pps', 0),
+                'tx_bps': p0.get('tx_bps', 0),
+                'rx_bps': p1.get('rx_bps', 0),
                 'latency_avg': latency.get('average', 0),
                 'latency_min': latency.get('total_min', 0),
                 'latency_max': latency.get('total_max', 0),
@@ -239,7 +240,12 @@ def main():
         client.set_service_mode(ports=[0], enabled=False, filtered=False, mask=None)
 
         client.add_streams(profile.get_streams(), ports=[0])
-        client.start(ports=[0], duration=test_duration, force=True, mult="98%")
+
+        multiplier = "98%"
+        if "64" in test.get("name"):
+            multiplier = "50%"
+
+        client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
 
         print(f"Running test {test.get('name')} for {test_duration} seconds...")
         time.sleep(stats_start_delay)

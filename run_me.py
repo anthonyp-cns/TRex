@@ -241,7 +241,10 @@ def main():
             client.set_service_mode(ports=[0,1], enabled=False, filtered=False, mask=None)
 
             client.add_streams(profile.get_streams(), ports=[0])
-            client.start(ports=[0], duration=test_duration, force=True, mult="98%")
+            multiplier = "98%"
+            if "64" in test.get("name"):
+                multiplier = "50%"
+            client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
 
             print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
             time.sleep(stats_start_delay)

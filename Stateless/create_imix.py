@@ -66,8 +66,8 @@ class IMIXStream:
                 )
                 streams.append(stream)
                 stream_id += 1
-            src_ip = self.src_range[2]
-            dst_ip = self.dst_range[2]
-            streams.append(self.create_latency_stream(src_ip, dst_ip, self.pg_id))
+        src_ip = self.src_range[2]
+        dst_ip = self.dst_range[2]
+        streams.append(self.create_latency_stream(src_ip, dst_ip, self.pg_id))
 
         return streams

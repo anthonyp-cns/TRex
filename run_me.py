@@ -58,15 +58,15 @@ v4_imix_tests = [
 v6_tests = [
 {"name": "1101_udp_64b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 64,
  "num_flows": 240,"pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-{"name": "1101_udp_64b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 512,
+{"name": "1101_udp_512b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 512,
  "num_flows": 240,"pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-{"name": "1101_udp_64b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 1500,
+{"name": "1101_udp_1500b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 1500,
  "num_flows": 240,"pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
 {"name": "1101_tcp_64b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 64,
  "num_flows": 240,"pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-{"name": "1101_tcp_64b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 512,
+{"name": "1101_tcp_512b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 512,
  "num_flows": 240,"pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-{"name": "1101_tcp_64b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 1500,
+{"name": "1101_tcp_1500b_v6", "src_range": "3fff:ba7a:1101::1", "dst_range": "3fff:aa7a:1401::1", "packet_size": 1500,
  "num_flows": 240,"pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"}
 ]
 

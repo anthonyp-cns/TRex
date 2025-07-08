@@ -148,8 +148,8 @@ def main():
             total_test_duration_units = "Hours"
 
 
-    print(f"Running {num_tests} tests.\n Tests will take approximately "
-          f"{total_test_duration} {total_test_duration_units}.  Expected completion: {future.strftime('%Y-%m-%d %H:%M')}")
+    print(f"Running {num_tests} tests on tower_name {tower_name}.\n Tests will take approximately "
+          f"{round(total_test_duration,2)} {total_test_duration_units}.  Expected completion: {future.strftime('%Y-%m-%d %H:%M')}")
 
     stats_base_dir = os.path.join('stats', tower_name)
     os.makedirs(stats_base_dir, exist_ok=True)
@@ -183,12 +183,12 @@ def main():
             client.set_service_mode(ports=[0,1], enabled=False, filtered=False, mask=None)
 
             client.add_streams(profile.get_streams(), ports=[0])
-            multiplier = "98%"
+            multiplier = "97%"
             if "64" in test.get("name"):
-                multiplier = "45%"
+                multiplier = "3.7Gb"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
-
-            print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
+            now = datetime.now()
+            print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")
             time.sleep(stats_start_delay)
             test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
             os.makedirs(test_stats_dir, exist_ok=True)
@@ -302,8 +302,8 @@ def main():
             if "64" in test.get("name"):
                 multiplier = "50%"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
-
-            print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
+            now = datetime.now()
+            print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")
             time.sleep(stats_start_delay)
             test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
             os.makedirs(test_stats_dir, exist_ok=True)

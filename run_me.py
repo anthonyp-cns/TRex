@@ -138,7 +138,7 @@ def main():
     total_test_duration = num_tests * test_duration
     print(f"total test duration: {total_test_duration} seconds")
     now = datetime.now()
-    future = now + timedelta(seconds=total_test_duration)
+    future = now + timedelta(seconds=(total_test_duration+240))
 
     total_test_duration_units = "seconds"
     if total_test_duration > 60:
@@ -186,7 +186,7 @@ def main():
             client.add_streams(profile.get_streams(), ports=[0])
             multiplier = "97%"
             if "64" in test.get("name"):
-                multiplier = "3.7gbps"
+                multiplier = "3.2gbps"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
             now = datetime.now()
             print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")
@@ -241,11 +241,11 @@ def main():
 
         multiplier = "96%"
         if "64" in test.get("name"):
-            multiplier = "50%"
+            multiplier = "3.2gbps"
 
         client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
         now = datetime.now()
-        print(f"{ now.strftime('%H:%M:%S') }  -  Running test {test.get('name')} for {test_duration} seconds...")
+        print(f"{ now.strftime('%H:%M:%S') }   Running test {test.get('name')} for {test_duration} seconds...")
         time.sleep(stats_start_delay)
         test_stats_dir = os.path.join(stats_base_dir,test.get("name"))
         os.makedirs(test_stats_dir, exist_ok=True)
@@ -300,7 +300,7 @@ def main():
             client.add_streams(profile.get_streams(), ports=[0])
             multiplier = "98%"
             if "64" in test.get("name"):
-                multiplier = "50%"
+                multiplier = "3.2gbps"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
             now = datetime.now()
             print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")

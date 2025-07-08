@@ -15,7 +15,7 @@ from Stateless.create_v6_stream import STLSv6
 from Stateless.create_imix import IMIXStream
 
 #### SETUP ####
-test_duration = 5 * 60 + 30 # Test duration in seconds
+test_duration = (5 * 60 + 30) # Test duration in seconds
 stats_start_delay = 30
 from config import *
 
@@ -136,6 +136,7 @@ def main():
     ### Time calculations and test lengths
     num_tests = len(v4_tests) + len(v4_imix_tests) + len(v6_tests) + len(v6_imix_tests)
     total_test_duration = num_tests * test_duration
+    print(f"total test duration: {total_test_duration} seconds")
     now = datetime.now()
     future = now + timedelta(seconds=total_test_duration)
 

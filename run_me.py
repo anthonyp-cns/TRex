@@ -127,11 +127,11 @@ def summarize_stats_by_subfolder(stats_dir):
 # Main script
 def main():
     tower_name = input("Enter Tower name: ")
-    ip = input("Enter IP address of first computer: ") or None
-    username = input("Enter username(DEFAULT: root): ") or "root"
-    password = getpass.getpass("Enter password (DEFAULT: 12345678): ") or "12345678"
-    if ip:
-        devices.append([f'libreqos.{tower_name}.acore.network', ip, username, password])
+    # ip = input("Enter IP address of first computer: ") or None
+    # username = input("Enter username(DEFAULT: root): ") or "root"
+    # password = getpass.getpass("Enter password (DEFAULT: 12345678): ") or "12345678"
+    # if ip:
+    #     devices.append([f'libreqos.{tower_name}.acore.network', ip, username, password])
 
     ### Time calculations and test lengths
     num_tests = len(v4_tests) + len(v4_imix_tests) + len(v6_tests) + len(v6_imix_tests)

@@ -186,7 +186,7 @@ def main():
             client.add_streams(profile.get_streams(), ports=[0])
             multiplier = "97%"
             if "64" in test.get("name"):
-                multiplier = "3.7Gb"
+                multiplier = "3.7gbps"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
             now = datetime.now()
             print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")

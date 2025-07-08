@@ -166,14 +166,17 @@ def main():
             client.reset()
             client.set_service_mode(ports=[0,1], enabled=True, filtered=False, mask=None)
             if test.get("vlan_id") == 1101:
-                client.set_l3_mode(0, "198.18.101.5","198.18.101.1", vlan=1101)
-                client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+                client.set_l3_mode(0, v4_1101_tx_interface.get("src"),v4_1101_tx_interface.get("dst"),
+                                   vlan=v4_1101_tx_interface.get("vlan"))
+                client.set_l3_mode(1, v4_rx_interface.get("src"),v4_rx_interface.get("dst"), vlan=v4_rx_interface.get("vlan"))
                 client.arp(ports=[0], retries=3, verbose=True, vlan=1101)
                 client.arp(ports=[1], retries=3, verbose=True)
 
             elif test.get("vlan_id") ==1201:
-                client.set_l3_mode(0, "100.66.0.5","100.66.0.1", vlan=1201)
-                client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+                client.set_l3_mode(0, v4_1201_tx_interface.get("src"), v4_1201_tx_interface.get("dst"),
+                                   vlan=v4_1201_tx_interface.get("vlan"))
+                client.set_l3_mode(1, v4_rx_interface.get("src"), v4_rx_interface.get("dst"),
+                                   vlan=v4_rx_interface.get("vlan"))
                 client.arp(ports=[0], retries=3, verbose=True, vlan=1201)
                 client.arp(ports=[1], retries=3, verbose=True)
 
@@ -217,14 +220,18 @@ def main():
         client.reset()
         client.set_service_mode(ports=[0, 1], enabled=True, filtered=False, mask=None)
         if test.get("vlan_id") == 1101:
-            client.set_l3_mode(0, "198.18.101.5", "198.18.101.1", vlan=1101)
-            client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+            client.set_l3_mode(0, v4_1101_tx_interface.get("src"), v4_1101_tx_interface.get("dst"),
+                               vlan=v4_1101_tx_interface.get("vlan"))
+            client.set_l3_mode(1, v4_rx_interface.get("src"), v4_rx_interface.get("dst"),
+                               vlan=v4_rx_interface.get("vlan"))
             client.arp(ports=[0], retries=3, verbose=True, vlan=1101)
             client.arp(ports=[1], retries=3, verbose=True)
 
         elif test.get("vlan_id") == 1201:
-            client.set_l3_mode(0, "100.66.0.5", "100.66.0.1", vlan=1201)
-            client.set_l3_mode(1, "100.122.100.2", "100.122.100.1")
+            client.set_l3_mode(0, v4_1201_tx_interface.get("src"), v4_1201_tx_interface.get("dst"),
+                               vlan=v4_1201_tx_interface.get("vlan"))
+            client.set_l3_mode(1, v4_rx_interface.get("src"), v4_rx_interface.get("dst"),
+                               vlan=v4_rx_interface.get("vlan"))
             client.arp(ports=[0], retries=3, verbose=True, vlan=1201)
             client.arp(ports=[1], retries=3, verbose=True)
 

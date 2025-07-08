@@ -25,16 +25,16 @@ devices = [
 v4_tests =[
     {"name": "1101_tcp_64b","src_range": "198.18.104.","dst_range": "203.0.113.","packet_size": 64, "num_flows":240,
      "pg_id":10, "vlan_id": 1101, 'protocol': "tcp"},
-    # {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
-    # {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
+    {"name": "1101_tcp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "tcp"},
     {"name": "1101_udp_64b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
      "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-    # {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
-    # {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
-    #  "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_512b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
+    {"name": "1101_udp_1500b", "src_range": "198.18.104.", "dst_range": "203.0.113.", "packet_size": 1500, "num_flows": 240,
+     "pg_id": 10, "vlan_id": 1101, 'protocol': "udp"},
     # {"name": "1201_tcp_64b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 64, "num_flows": 240,
     #  "pg_id": 10, "vlan_id": 1201, 'protocol': "tcp"},
     # {"name": "1201_tcp_512b", "src_range": "100.65.0.", "dst_range": "203.0.113.", "packet_size": 512, "num_flows": 240,
@@ -180,11 +180,11 @@ def summarize_stats_by_subfolder(stats_dir):
 # Main script
 def main():
     tower_name = input("Enter Tower name: ")
-    ip = input("Enter IP address of first computer: ")
+    ip = input("Enter IP address of first computer: ") or None
     username = input("Enter username(DEFAULT: root): ") or "root"
     password = getpass.getpass("Enter password (DEFAULT: 12345678): ") or "12345678"
-
-    devices.append([f'libreqos.{tower_name}.acore.network', ip, username, password])
+    if ip:
+        devices.append([f'libreqos.{tower_name}.acore.network', ip, username, password])
 
     ### Time calculations and test lengths
     num_tests = len(v4_tests) + len(v4_imix_tests) + len(v6_tests) + len(v6_imix_tests)
@@ -235,7 +235,7 @@ def main():
             client.add_streams(profile.get_streams(), ports=[0])
             multiplier = "98%"
             if "64" in test.get("name"):
-                multiplier = "50%"
+                multiplier = "45%"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
 
             print(f"datetime.now().strftime('%H:%M:%S')   Running test {test.get('name')} for {test_duration} seconds...")
@@ -285,7 +285,7 @@ def main():
 
         client.add_streams(profile.get_streams(), ports=[0])
 
-        multiplier = "98%"
+        multiplier = "96%"
         if "64" in test.get("name"):
             multiplier = "50%"
 

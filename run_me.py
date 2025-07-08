@@ -261,9 +261,6 @@ def main():
         client.disconnect()
 
 
-
-
-
     for test in v6_tests:
             profile=STLSv6(src_range=test.get('src_range'), dst_range=test.get('dst_range'), pkt_size=test.get('packet_size'), num_flows=test.get("num_flows"),
                           pg_id=test.get("pg_id"), vlan_id=test.get("vlan_id"), protocol=test.get("protocol"))
@@ -322,10 +319,8 @@ def main():
             client.disconnect()
 
 
-
-
-    summarize_stats_by_subfolder(stats_base_dir)
-    print(f"Summary written to each test folder")
+    # summarize_stats_by_subfolder(stats_base_dir)
+    print(f"\n\n\n ### All tests complete, Test Data written to: {stats_base_dir} ###")
 
 
 if __name__ == "__main__":

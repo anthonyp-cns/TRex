@@ -213,7 +213,6 @@ def main():
 
 
     for test in v4_imix_tests:
-        print(f"Starting test: {test.get('name')}")
         profile=IMIXStream(src_range=test.get("src_range"), dst_range=test.get("dst_range"),
                            vlan_id=test.get("vlan_id"))
         client = STLClient()

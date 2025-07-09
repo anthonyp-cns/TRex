@@ -184,9 +184,9 @@ def main():
             client.set_service_mode(ports=[0,1], enabled=False, filtered=False, mask=None)
 
             client.add_streams(profile.get_streams(), ports=[0])
-            multiplier = "97%"
+            multiplier = "90%%"
             if "64" in test.get("name"):
-                multiplier = "3.2gbps"
+                multiplier = "40%"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
             now = datetime.now()
             print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")
@@ -239,9 +239,9 @@ def main():
 
         client.add_streams(profile.get_streams(), ports=[0])
 
-        multiplier = "96%"
+        multiplier = "90%"
         if "64" in test.get("name"):
-            multiplier = "3.2gbps"
+            multiplier = "40%"
 
         client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
         now = datetime.now()
@@ -298,9 +298,9 @@ def main():
             # client.set_service_mode(ports=[0,1], enabled=False, filtered=False, mask=None)
 
             client.add_streams(profile.get_streams(), ports=[0])
-            multiplier = "98%"
+            multiplier = "90%"
             if "64" in test.get("name"):
-                multiplier = "3.2gbps"
+                multiplier = "35%"
             client.start(ports=[0], duration=test_duration, force=True, mult=multiplier)
             now = datetime.now()
             print(f"{now.strftime('%H:%M:%S')}   Running test {test.get('name')} for {test_duration} seconds...")

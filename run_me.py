@@ -15,8 +15,7 @@ from Stateless.create_v6_stream import STLSv6
 from Stateless.create_imix import IMIXStream
 
 #### SETUP ####
-test_duration = (5 * 60 + 30) # Test duration in seconds
-stats_start_delay = 30
+
 from config import *
 
 

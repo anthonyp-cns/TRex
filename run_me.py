@@ -238,7 +238,7 @@ def main():
 
         client.add_streams(profile.get_streams(), ports=[0])
 
-        multiplier = "90%"
+        multiplier = "96%"
         if "64" in test.get("name"):
             multiplier = "40%"
 

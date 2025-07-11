@@ -58,11 +58,10 @@ class STLSv4:
             dport = 8080
             src = f"{self.src_range}{i}"
             dst = f"{self.dst_range}{i}"
-            if i > 254:
-                sport = random.randint(1025, 65534)
-                dport = random.randint(1025, 65534)
-                src = f"{self.src_range}{random.randint(1, 254)}"
-                dst = f"{self.dst_range}{random.randint(1, 254)}"
+            sport = random.randint(1025, 65534)
+            dport = random.randint(1025, 65534)
+            src = f"{self.src_range}{random.randint(1, 254)}"
+            dst = f"{self.dst_range}{random.randint(1, 254)}"
             streams.append(self.create_stream(src, dst, sport, dport))
 
         # Latency stream using flow #2

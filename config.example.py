@@ -1,6 +1,7 @@
 test_duration = (5 * 60 + 30) # Test duration in seconds
 stats_start_delay = 30
-
+multiplier = "96%"
+small_multiplier = "40%"
 
 v4_1101_tx_interface = {"src": "198.18.101.10", "dst": "198.18.101.1", "vlan_id": 1101}
 v4_1201_tx_interface = {"src": "100.65.0.10", "dst": "100.65.0.1", "vlan_id": 1201}
